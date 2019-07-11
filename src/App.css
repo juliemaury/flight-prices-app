@@ -1,33 +1,67 @@
-.App {
-  text-align: center;
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  line-height:1.4;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.App{
+  background: url("https://csawpcdnep01.azureedge.net/cache/2/f/b/2/3/5/2fb235a065bcf7a1596d626bd56955fcbdcb8c12.jpg") no-repeat scroll 50% 0px / 100% auto, rgba(0, 0, 0, 0) url("https://csawpcdnep01.azureedge.net/cache/4/d/e/d/7/9/4ded795543e5a305cc3886210b52d02b3baebcf5.jpg") repeat-y scroll 50% 0px / 100% auto;
 }
 
-.App-link {
-  color: #61dafb;
+h1{
+  color:#fff;
+  text-align:center;
+  padding-top:50px;
+  padding-bottom:20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.center{
+  text-align:center;
 }
+
+/*-------------------- 1st ROW --------------------*/
+
+select{
+  width:100%;
+  padding:20px 40px;
+  border-radius:7px;
+}
+
+.switch-button.is-visible {
+  visibility: visible;
+}
+
+.switch-button {
+  cursor: pointer;
+  border:none;
+  background:none;
+  width:60px;
+  margin:auto;
+  xvisibility: hidden;
+}
+
+#switchsvg path{
+  fill:#fff;
+}
+
+.switch-svg {
+  transition: transform .5s;
+}
+
+.switch-button:hover .switch-svg {
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+/*-------------------- 2nd ROW --------------------*/
+
+
+
+/*-------------------- 3rd ROW --------------------*/
+
+
