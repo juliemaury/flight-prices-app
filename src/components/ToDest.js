@@ -1,24 +1,22 @@
 import React, { Component } from 'react'
-import axios from 'axios';
+import DestData from '../Data/Dest.json'
 
 class ToDest extends Component {
 
     state = {
-        todest:[
-          
-        ]
-      }
-    
-    componentDidMount() {
-        axios.get('https://www.csa.cz/Umbraco/Api/DestinationCache/GetAllDestinations/?destinations_language=en')
-        .then(res => this.setState({ todest : res.data }))
+        empty:true
     }
 
     render() {
+        console.log(this.state.empty)
         return (
             <div className="select">
-                <select name="">
-                    <option>Arrival airport</option>
+                <label className="DestLabel">To</label>
+                <select>
+                    <option></option>
+                    {DestData.map((Data) => {
+                        return <option key={Data.DestinationID}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
+                    })}
                 </select> 
             </div>
         )
