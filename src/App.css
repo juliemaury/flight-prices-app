@@ -36,6 +36,14 @@ h1{
   height:100%;
 }
 
+.hidden{
+  visibility:hidden;
+}
+
+.is-visible{
+  visibility:visible;
+}
+
 /*-------------------- 1st ROW --------------------*/
 
 .App{
@@ -47,6 +55,7 @@ select{
   padding:15px 30px;
   padding-top:35px;
   border-radius:7px;
+  border:none;
   appearance:none;
   -moz-appearance: none;
 	-webkit-appearance: none;
@@ -54,7 +63,6 @@ select{
 
 select:hover{
   cursor:pointer;
-  
 }
 
 .DestLabel{
@@ -64,17 +72,12 @@ select:hover{
   font-size:12px;
 }
 
-.switch-button.is-visible {
-  visibility: visible;
-}
-
 .switch-button {
   cursor: pointer;
   border:none;
   background:none;
   width:60px;
   margin:auto;
-  visibility: hidden;
 }
 
 #switchsvg path{
@@ -92,7 +95,27 @@ select:hover{
 
 /*-------------------- 2nd ROW --------------------*/
 
+.selectmonth{
+  margin-right:20px;
+}
 
+.calendar-container{
+  color:#000;
+}
+
+.react-month-picker {
+  width: 100px;
+  display: inline-block;
+}
+
+.react-month-picker .col_mp.selected_date_mp {
+  font-size: 16px;
+}
+
+.month-input{
+  width: 100%;
+  text-align: center;
+}
 
 /*-------------------- 3rd ROW --------------------*/
 
@@ -104,7 +127,7 @@ select:hover{
   max-height:400px;
   overflow:scroll;
   border-radius:7px;
-  visibility: hidden;
+  xvisibility: hidden;
 }
 
 .PricesTable th, .PricesTable td{

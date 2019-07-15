@@ -1,40 +1,41 @@
 import React, { Component } from 'react'
-import DestData from '../Data/Dest.json'
-import axios from 'axios';
+import PropTypes from 'prop-types';
 
 class FromDest extends Component {
 
-    state = {
-        dest:[],
-        prices:[]
-    }
-    
-    componentDidMount() {
-        axios.get('/Api/DestinationCache/GetAllDestinations/?destinations_language=en')
-        .then(res => this.setState({ dest : res.data }))
-        axios.get('/Api/CalendarPricesCache/GetPrices/?DEP=PRG&ARR=AMS&MONTH_SEL=05/2019&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-        .then(res => this.setState({ prices : res.data }))
-    }
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+      }
+
+    handleChange(e) {
+        this.props.handleChange(e.target.value);
+      }
 
     render() {
-        console.log(this.state.dest) ;
-        console.log(this.state.prices) ;
         return (
             <div className="select">
                 <label className="DestLabel">From</label>
-                <select>
-
-                    <option>{DestData[63].AirportCityName}, {DestData[63].AirportName} ({DestData[63].AirportCode})</option>
+                <select id="from" onChange={this.handleChange}>
+                    {this.props.dest.map((Data) => {
+                        const option = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
+                        if(Data.AirportCityName === 'Prague'){
+                            return <option selected key={Data.DestinationID} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
                     
-                    {DestData.map((Data) => {
-                        return <option key={Data.DestinationID}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
-                    
+                        } else{
+                            return <option selected="" key={Data.DestinationID} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
+                        }
                     })}
-
                 </select> 
             </div>
         )
     }
+}
+
+FromDest.propTypes = {
+    dest: PropTypes.array.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    fromvalue: PropTypes.string.isRequired,
 }
 
 export default FromDest;
