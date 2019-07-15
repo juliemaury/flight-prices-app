@@ -13,18 +13,16 @@ class ToDest extends Component {
       }
 
     render() {
-
+        console.log(this.children)
         return (
-            <div className="select">
-                <label className="DestLabel">To</label>
-                <select id="to" onChange={this.handleChange}>
+            <select value={this.props.tovalue}  onChange={this.handleChange}>
                     <option selected hidden> </option>
                     {this.props.dest.map((Data) => {
-                    const option = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
-                        return <option selected="" key={Data.DestinationID} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
+                        const option = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
+                        let tocode = Data.AirportCode;
+                        return <option tocode={tocode} selected={this.props.tovalue === option} key={Data.DestinationID} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
                     })}
-                </select> 
-            </div>
+            </select>
         )
     }
 }

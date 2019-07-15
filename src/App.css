@@ -37,11 +37,11 @@ h1{
 }
 
 .hidden{
-  visibility:hidden;
+  display:none;
 }
 
 .is-visible{
-  visibility:visible;
+  display:block;
 }
 
 /*-------------------- 1st ROW --------------------*/
@@ -127,7 +127,6 @@ select:hover{
   max-height:400px;
   overflow:scroll;
   border-radius:7px;
-  xvisibility: hidden;
 }
 
 .PricesTable th, .PricesTable td{

@@ -5,6 +5,9 @@ class FromDest extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            fromcode : "",
+        }
         this.handleChange = this.handleChange.bind(this);
       }
 
@@ -14,20 +17,12 @@ class FromDest extends Component {
 
     render() {
         return (
-            <div className="select">
-                <label className="DestLabel">From</label>
-                <select id="from" onChange={this.handleChange}>
+            <select value={this.props.fromvalue} onChange={this.handleChange}>
                     {this.props.dest.map((Data) => {
                         const option = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
-                        if(Data.AirportCityName === 'Prague'){
-                            return <option selected key={Data.DestinationID} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
-                    
-                        } else{
-                            return <option selected="" key={Data.DestinationID} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
-                        }
+                        return <option selected={this.props.fromvalue === option} key={Data.DestinationID} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
                     })}
-                </select> 
-            </div>
+            </select>
         )
     }
 }

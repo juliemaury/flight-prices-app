@@ -18,19 +18,19 @@ class App extends Component {
     this.state = {
       dest:[],
       prices:[],
-      trip:"one-way", /*round-trip*/
       yearcode:"",
       monthcode:"",
-      fromvalue:"",
+      fromvalue:"Prague, Ruzyne (PRG)",
       tovalue:"",
       displayswitch:"",
       switch:false,
+      tocode:"",
+      fromcode:"",
     };
 
     this.fromDestChange = this.fromDestChange.bind(this);
     this.toDestChange = this.toDestChange.bind(this);
     this.switchDest = this.switchDest.bind(this);
-
   }
 
   fromDestChange = (fromvalue) =>
@@ -51,7 +51,7 @@ class App extends Component {
     }
     
   }
-  
+
   componentDidMount() {
     axios.get('/Api/DestinationCache/GetAllDestinations/?destinations_language=en')
     .then(res => this.setState({ dest : res.data }))
@@ -67,6 +67,41 @@ class App extends Component {
       hiddenrow = "row p-4 is-visible"
     }
 
+    const displays = this.state.switch;
+    let destination1;
+    let destination2;
+
+    if (displays) {
+      destination2 = 
+        <FromDest 
+        dest={this.state.dest}
+        fromvalue={this.state.fromvalue}
+        handleChange={this.fromDestChange}
+        />;
+      destination1 = 
+        <ToDest
+        dest={this.state.dest}
+        tovalue={this.state.tovalue}
+        handleChange={this.toDestChange}
+        tocode={this.state.tocode}
+        />;
+
+    } else {
+      destination2 = 
+        <ToDest
+        dest={this.state.dest}
+        tovalue={this.state.tovalue}
+        handleChange={this.toDestChange}
+        tocode={this.state.tocode}
+        />;
+      destination1 = 
+        <FromDest 
+        dest={this.state.dest}
+        fromvalue={this.state.fromvalue}
+        handleChange={this.fromDestChange}
+        />;
+    }
+
     return (
         <div className="App">
           <div className="container">
@@ -74,11 +109,10 @@ class App extends Component {
 
             <div className="row p-4">
               <div className="col-12 col-md-5 my-2 p-0">
-                <FromDest 
-                dest={this.state.dest}
-                fromvalue={this.state.fromvalue}
-                handleChange={this.fromDestChange}
-                />
+                <div className="select">
+                  <label className="DestLabel">From</label>
+                    {destination1}
+                </div>
               </div>
               <div className="col-12 col-md-2 my-2 p-0 middle">
                 <div className="center h100">
@@ -91,11 +125,10 @@ class App extends Component {
                 </div>
               </div>
               <div className="col-12 col-md-5 my-2 p-0">
-                <ToDest
-                dest={this.state.dest}
-                tovalue={this.state.tovalue}
-                handleChange={this.toDestChange}
-                />
+                <div className="select">
+                  <label className="DestLabel">To</label>
+                    {destination2}
+                </div>
               </div>
             </div>
 
