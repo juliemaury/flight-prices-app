@@ -7,9 +7,6 @@ import './App.css';
 import MonthPickerInput from 'react-month-picker-input';
 import 'react-month-picker-input/dist/react-month-picker-input.css';
 
-const Dep = 'PRG'
-const Arr = 'AMS'
-
 class App extends Component {
   
   constructor(props) {
@@ -31,7 +28,8 @@ class App extends Component {
     this.fromDestChange = this.fromDestChange.bind(this);
     this.toDestChange = this.toDestChange.bind(this);
     this.switchDest = this.switchDest.bind(this);
-    this.getCode = this.getCode.bind(this);
+    this.getFromCode = this.getFromCode.bind(this);
+    this.getToCode = this.getToCode.bind(this);
   }
 
   fromDestChange = (fromvalue) =>
@@ -52,14 +50,18 @@ class App extends Component {
     }
   }
 
-  getCode(fromcode){
+  getFromCode(fromcode){
     this.setState({fromcode:fromcode})
+  }
+
+  getToCode(tocode){
+    this.setState({tocode:tocode})
   }
 
   componentDidMount() {
     axios.get('/Api/DestinationCache/GetAllDestinations/?destinations_language=en')
     .then(res => this.setState({ dest : res.data }))
-    axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ Dep + '&ARR=' + Arr +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+    axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
     .then(res => this.setState({ prices : res.data }))
   }
 
@@ -83,14 +85,14 @@ class App extends Component {
         dest={this.state.dest}
         fromvalue={this.state.fromvalue}
         handleChange={this.fromDestChange}
-        airportCode={this.getCode}
+        airportCode={this.getFromCode}
         />;
       destination1 = 
         <ToDest
         dest={this.state.dest}
         tovalue={this.state.tovalue}
         handleChange={this.toDestChange}
-        tocode={this.state.tocode}
+        airportCode={this.getToCode}
         />;
 
     } else {
@@ -99,14 +101,15 @@ class App extends Component {
         dest={this.state.dest}
         tovalue={this.state.tovalue}
         handleChange={this.toDestChange}
-        tocode={this.state.tocode}
+        airportCode={this.getToCode}
         />;
       destination1 = 
         <FromDest 
         dest={this.state.dest}
         fromvalue={this.state.fromvalue}
         handleChange={this.fromDestChange}
-        airportCode={this.getCode}
+        airportCode={this.getFromCode}
+
         />;
     }
 

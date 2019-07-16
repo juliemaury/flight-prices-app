@@ -8,21 +8,16 @@ class FromDest extends Component {
         
         this.handleChange = this.handleChange.bind(this);
         this.airportCode = this.airportCode.bind(this);
-      }
+    }
 
     handleChange(e) {
         this.props.handleChange(e.target.value);
-      }
-
+    }
 
     airportCode = (e) => { 
         const selectedIndex = e.target.options.selectedIndex;
         let fromcode = e.target.options[selectedIndex].getAttribute('code');
         this.props.airportCode(fromcode);
-        /*const selectedIndex = e.target.options.selectedIndex;
-        let fromcode = e.target.options[selectedIndex].getAttribute('code');
-        this.setState({fromcode:fromcode})*/
-        
     }
 
     twoCalls = (e) => {
