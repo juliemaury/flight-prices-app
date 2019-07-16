@@ -26,6 +26,7 @@ class App extends Component {
       fromcode:"PRG",
       tocode:"",
       initial:true,
+      results:"",
     };
 
     this.fromDestChange = this.fromDestChange.bind(this);
@@ -59,11 +60,17 @@ class App extends Component {
   }
 
   switchDest(){
+    let from = this.state.fromcode
+    let to = this.state.tocode
+    this.setState({fromcode:to})
+    this.setState({tocode:from})
     if(this.state.switch === false){
       this.setState({switch: true});
     }else{
       this.setState({switch: false});
     }
+    axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ to + '&ARR=' + from +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+    .then(res => this.setState({ prices : res.data }))
   }
 
   render(){

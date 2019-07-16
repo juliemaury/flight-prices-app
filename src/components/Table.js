@@ -7,18 +7,29 @@ class Table extends Component {
         let tbody;
 
         if(this.props.initial){
-            tbody = <tr><td colspan="4" className="py-4"><em>Please select the date of your travel</em></td></tr>
+            tbody = <tbody>
+                        <tr>
+                            <td colSpan="4" className="py-4"><em>Please select the date of your travel</em></td>
+                        </tr>
+                    </tbody>
         }
 
         else{
             tbody = <tbody>
                     {this.props.prices.calendarPriceList.dayList.map((Trip) => {
-                        return <tr key={uuid.v4()}>
-                            <td>{Trip.date}</td> 
-                            <td>{Trip.price}</td>
-                            <td>{Trip.seats}</td>
-                            <td>{Trip.duration}</td>
-                        </tr>})}
+                        if(Trip.status === "AVAILABLE"){
+                            return <tr key={uuid.v4()}>
+                                <td>{Trip.date}</td> 
+                                <td>{Trip.price}</td>
+                                <td>{Trip.seats}</td>
+                                <td>{Trip.duration}</td>
+                            </tr>
+                        }
+                        else{
+                            return null
+                        }
+                    })}
+                        
                     </tbody>
         }
 
