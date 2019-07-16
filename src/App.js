@@ -123,8 +123,8 @@ class App extends Component {
 
     return (
         <div className="App">
-          <div className="container">
-            <h1>Choose your flight !</h1>
+          <div className="container py-4">
+            <h1 className="py-5">Choose your flight !</h1>
 
             <div className="row p-4">
               <div className="col-12 col-md-5 my-2 p-0">
