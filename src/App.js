@@ -24,13 +24,14 @@ class App extends Component {
       tovalue:"",
       displayswitch:"",
       switch:false,
+      fromcode:"PRG",
       tocode:"",
-      fromcode:"",
     };
 
     this.fromDestChange = this.fromDestChange.bind(this);
     this.toDestChange = this.toDestChange.bind(this);
     this.switchDest = this.switchDest.bind(this);
+    this.getCode = this.getCode.bind(this);
   }
 
   fromDestChange = (fromvalue) =>
@@ -49,7 +50,10 @@ class App extends Component {
     }else{
       this.setState({switch: false});
     }
-    
+  }
+
+  getCode(fromcode){
+    this.setState({fromcode:fromcode})
   }
 
   componentDidMount() {
@@ -60,8 +64,10 @@ class App extends Component {
   }
 
   render(){
+
     let classswitch = 'switch-button h100 hidden'
     let hiddenrow = "row p-4 hidden"
+
     if(this.state.displayswitch === true){
       classswitch = 'switch-button h100 is-visible'
       hiddenrow = "row p-4 is-visible"
@@ -77,6 +83,7 @@ class App extends Component {
         dest={this.state.dest}
         fromvalue={this.state.fromvalue}
         handleChange={this.fromDestChange}
+        airportCode={this.getCode}
         />;
       destination1 = 
         <ToDest
@@ -99,6 +106,7 @@ class App extends Component {
         dest={this.state.dest}
         fromvalue={this.state.fromvalue}
         handleChange={this.fromDestChange}
+        airportCode={this.getCode}
         />;
     }
 

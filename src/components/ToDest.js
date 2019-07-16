@@ -13,7 +13,6 @@ class ToDest extends Component {
       }
 
     render() {
-        console.log(this.children)
         return (
             <select value={this.props.tovalue}  onChange={this.handleChange}>
                     <option selected hidden> </option>

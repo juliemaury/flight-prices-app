@@ -18,7 +18,7 @@ class Table extends Component {
                     {PricesData.calendarPriceList.dayList.map((Trip) => {
                         return <tr key={uuid.v4()}>
                             <td>{Trip.date}</td> 
-                            <td>{Trip.price}</td> 
+                            <td>{Trip.price}</td>
                             <td>{Trip.seats}</td>
                             <td>{Trip.duration}</td>
                         </tr>
