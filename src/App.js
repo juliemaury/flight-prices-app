@@ -7,6 +7,8 @@ import './App.css';
 import MonthPickerInput from 'react-month-picker-input';
 import 'react-month-picker-input/dist/react-month-picker-input.css';
 
+//https://www.csa.cz/Umbraco/Api/CalendarPricesCache/GetPrices/?DEP=PRG&ARR=BCN&MONTH_SEL=09/2019&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz
+
 class App extends Component {
   
   constructor(props) {
@@ -14,7 +16,7 @@ class App extends Component {
 
     this.state = {
       dest:[],
-      prices:[],
+      prices:{calendarPriceList:{dayList:[{"date":"2019-09-01","status":"AVAILABLE","price":"2086","seats":"9","rbd":"R","duration":"0225","flightsCount":1,"flights":[{"flightNumber":"0688","seats":"9","rbd":"R","depIata":"PRG","arrIata":"BCN","departureDateTime":"2019-09-01 11:25:00","arrivalDateTime":"2019-09-01 13:50:00","duration":"0225","mileage":"0","aircraftRef":"738"}]},{"date":"2019-09-02","status":"AVAILABLE","price":"2086","seats":"9","rbd":"R","duration":"0225","flightsCount":1,"flights":[{"flightNumber":"0688","seats":"9","rbd":"R","depIata":"PRG","arrIata":"BCN","departureDateTime":"2019-09-02 11:25:00","arrivalDateTime":"2019-09-02 13:50:00","duration":"0225","mileage":"0","aircraftRef":"738"}]},{"date":"2019-09-30","status":"AVAILABLE","price":"1826","seats":"8","rbd":"P","duration":"0225","flightsCount":1,"flights":[{"flightNumber":"0688","seats":"8","rbd":"P","depIata":"PRG","arrIata":"BCN","departureDateTime":"2019-09-30 11:25:00","arrivalDateTime":"2019-09-30 13:50:00","duration":"0225","mileage":"0","aircraftRef":"738"}]}]}},
       yearcode:"",
       monthcode:"",
       fromvalue:"Prague, Ruzyne (PRG)",
@@ -23,6 +25,7 @@ class App extends Component {
       switch:false,
       fromcode:"PRG",
       tocode:"",
+      initial:true,
     };
 
     this.fromDestChange = this.fromDestChange.bind(this);
@@ -42,14 +45,6 @@ class App extends Component {
     }
   }
 
-  switchDest(){
-    if(this.state.switch === false){
-      this.setState({switch: true});
-    }else{
-      this.setState({switch: false});
-    }
-  }
-
   getFromCode(fromcode){
     this.setState({fromcode:fromcode})
   }
@@ -61,8 +56,14 @@ class App extends Component {
   componentDidMount() {
     axios.get('/Api/DestinationCache/GetAllDestinations/?destinations_language=en')
     .then(res => this.setState({ dest : res.data }))
-    axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-    .then(res => this.setState({ prices : res.data }))
+  }
+
+  switchDest(){
+    if(this.state.switch === false){
+      this.setState({switch: true});
+    }else{
+      this.setState({switch: false});
+    }
   }
 
   render(){
@@ -151,11 +152,16 @@ class App extends Component {
                   closeOnSelect={true}
                   mode='calendarOnly' 
                   onChange={function(maskedValue, selectedYear, selectedMonth) {
-                    console.log(maskedValue, selectedYear, selectedMonth);
                     if(selectedMonth > 8){
                       this.setState({ yearcode : selectedYear, monthcode : selectedMonth + 1 });
+                      axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+                      .then(res => this.setState({ prices : res.data }))
+                      this.setState({initial:false})
                     } else{
                       this.setState({ yearcode : selectedYear, monthcode : '0' + (selectedMonth + 1) });
+                      axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=0' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+                      .then(res => this.setState({ prices : res.data }))
+                      this.setState({initial:false})
                     }
                   }.bind(this)}
                 />
@@ -164,7 +170,10 @@ class App extends Component {
 
             <div className={hiddenrow}>
               <div className="col-12 p-0">
-                <Table prices={this.state.prices}/>
+                <Table 
+                  prices={this.state.prices}
+                  initial={this.state.initial}
+                />
               </div>
             </div>
 
