@@ -39,52 +39,22 @@ class App extends Component {
     axios.get('/Api/DestinationCache/GetAllDestinations/?destinations_language=en')
     .then(res => this.setState({ dest : res.data }))
   }
-
+  
   fromDestChange(fromvalue, fromcode){
-    this.setState({loading:true});
-    if(!this.state.switch){
-      this.setState({fromcode:fromcode});
-      this.setState({fromvalue:fromvalue});
-      console.log('FROM : ' + fromcode);
-      console.log('TO : ' + this.state.tocode);
-      axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-      .then(res => this.setState({ prices : res.data, loading:false }))
-    }
-    else{
-      this.setState({tocode:fromcode});
-      this.setState({tovalue:fromvalue});
-      console.log('FROM : ' + this.state.tocode);
-      console.log('TO : ' + fromcode);
-      axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + fromcode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-      .then(res => this.setState({ prices : res.data, loading:false }))
-    }
+    this.setState({fromcode:fromcode, fromvalue:fromvalue}, function(){
+      this.searchTrips();
+    });
   }
 
   toDestChange(tovalue, tocode){
-    //change the state if user selected arrival destination
+    //change the state if user selected arrival destination for the first time
     if(tovalue !== ""){
       this.setState({displayswitch:true});
     }
     this.setState({loading:true});
-    //refresh the results 
-    
-    if(!this.state.switch){
-      this.setState({tocode:tocode});
-      this.setState({tovalue:tovalue});
-      console.log('FROM : ' + this.state.fromcode);
-      console.log('TO : ' + tocode);
-      axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + tocode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-      .then(res => this.setState({ prices : res.data, loading:false }))
-    }
-
-    else{
-      this.setState({fromcode:tocode});
-      this.setState({fromvalue:tovalue});
-      console.log('FROM : ' + tocode);
-      console.log('TO : ' + this.state.fromcode);
-      axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ tocode + '&ARR=' + this.state.fromcode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-      .then(res => this.setState({ prices : res.data, loading:false }));
-    }
+    this.setState({tocode:tocode, tovalue:tovalue}, function(){
+      this.searchTrips();
+    });
   }
 
   switchDest(){
@@ -95,20 +65,21 @@ class App extends Component {
     }else{
       this.setState({switch: false});
     }
-    //switch selected values in state
+    //switch selected values & airport codes in state
     let fromV = this.state.fromvalue;
     let toV = this.state.tovalue;
-    this.setState({fromvalue:toV});
-    this.setState({tovalue:fromV});
-    //switch airport codes in state
     let fromC = this.state.fromcode;
     let toC = this.state.tocode;
-    this.setState({fromcode:toC});
-    this.setState({tocode:fromC});
     //refresh the results
-    console.log('FROM : ' + toC);
-    console.log('TO : ' + fromC);
-    axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ toC + '&ARR=' + fromC +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+    this.setState({fromcode:toC, tocode:fromC, fromvalue:toV, tovalue:fromV}, function(){
+      this.searchTrips();
+    });
+  }
+
+  searchTrips(){
+    //refresh the results 
+    this.setState({loading:true});
+    axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
     .then(res => this.setState({ prices : res.data, loading:false }))
   }
 

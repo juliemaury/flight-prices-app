@@ -21,10 +21,6 @@ class FromDest extends Component {
 
         let options = this.props.dest.map((Data) => {
             const selectedOption = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
-            
-            /*if(!this.props.switch) { selectedvalue = this.props.value1 }
-            else{ selectedvalue = this.props.value2 }*/
-
             return <option key={Data.DestinationID} code={Data.AirportCode} value={selectedOption}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
         });
 

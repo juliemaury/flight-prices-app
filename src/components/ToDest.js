@@ -15,16 +15,13 @@ class ToDest extends Component {
         const selectedIndex = e.target.options.selectedIndex;
         const tocode = e.target.options[selectedIndex].getAttribute('code');
         this.props.handleChange(e.target.value, tocode);
+        console.log('TODEST.JS TOCODE : ' + tocode)
     }
 
     render() {
 
         let options = this.props.dest.map((Data) => {
             const selectedOption = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
-            
-            /*if(!this.props.switch) { selectedvalue = this.props.value2 }
-            else{ selectedvalue = this.props.value1 }*/
-
             return <option key={Data.DestinationID} code={Data.AirportCode} value={selectedOption}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
         });
 
