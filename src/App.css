@@ -4,13 +4,15 @@
   padding: 0;
 }
 
+html, #root{
+  height:100%;
+}
+
 body{
   font-family: Arial, Helvetica, sans-serif;
   line-height:1.4;
   color:#fff;
-}
-
-.App{
+  min-height:100%;
   background: url("https://csawpcdnep01.azureedge.net/cache/2/f/b/2/3/5/2fb235a065bcf7a1596d626bd56955fcbdcb8c12.jpg") no-repeat scroll 50% 0px / 100% auto, rgba(0, 0, 0, 0) url("https://csawpcdnep01.azureedge.net/cache/4/d/e/d/7/9/4ded795543e5a305cc3886210b52d02b3baebcf5.jpg") repeat-y scroll 50% 0px / 100% auto;
 }
 
@@ -204,13 +206,14 @@ select:hover{
 
 .PricesTable tbody{
   display:block;
-  overflow-y:scroll;
+  overflow-y:auto;
   max-height:300px;
 }
 
 .PricesTable tr{
   display:inline-table;
   width:100%;
+  border-bottom: 1px solid #ccc;
 }
 
 .PricesTable tr th:first-child{
