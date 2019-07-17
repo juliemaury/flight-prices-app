@@ -116,12 +116,12 @@ class App extends Component {
 
     //hidden content classes 
     let classswitch = 'switch-button h100 hidden'
-    let hiddenrow = "row p-4 hidden"
+    let hiddenrow = "row py-4 px-2 hidden"
 
     //add class is-visible and delete class hidden if user selected arrival destination
     if(this.state.displayswitch === true){
       classswitch = 'switch-button h100 is-visible'
-      hiddenrow = "row p-4 is-visible"
+      hiddenrow = "row py-4 px-2 is-visible"
     }
 
     //switch FromDest and ToDest components depending on switch state
@@ -169,7 +169,7 @@ class App extends Component {
           <div className="container py-4">
             <h1 className="py-5">Choose your flight !</h1>
 
-            <div className="row p-4">
+            <div className="row py-4 px-2">
               <div className="col-12 col-md-5 my-2 p-0">
                 <div className="select">
                   <label className="DestLabel">From</label>
@@ -192,31 +192,33 @@ class App extends Component {
             </div>
 
             <div className={hiddenrow}>
-              <div className="col-12 p-0 right">
+              <div className="col-12 p-0 date-wrap">
                 <label className="selectmonth">Select month and year :</label>
-                <MonthPickerInput 
-                  year={2019}
-                  closeOnSelect={true}
-                  mode='calendarOnly' 
-                  onChange={function(maskedValue, selectedYear, selectedMonth) {
-                    this.setState({loading:true});
-                    if(selectedMonth > 8) {
-                      this.setState({ yearcode : selectedYear, monthcode : selectedMonth + 1 });
-                      axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-                      .then(res => this.setState({ prices : res.data, loading:false }))
-                      this.setState({initial:false})
-                    } 
-                    else { 
-                      //add a '0' before month code to months from january to september 
-                      this.setState({ yearcode : selectedYear, monthcode : '0' + (selectedMonth + 1) });
-                      axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=0' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-                      .then(res => this.setState({ prices : res.data, loading:false }))
-                      //this.state.initial was true to display the "select a date" message (see Table.js)
-                      this.setState({initial:false})
-                    }
-                  }.bind(this)}
-                />
-                <Calendar />
+                  <div className="wrapper">
+                  <MonthPickerInput 
+                    year={2019}
+                    closeOnSelect={true}
+                    mode='calendarOnly' 
+                    onChange={function(maskedValue, selectedYear, selectedMonth) {
+                      this.setState({loading:true});
+                      if(selectedMonth > 8) {
+                        this.setState({ yearcode : selectedYear, monthcode : selectedMonth + 1 });
+                        axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+                        .then(res => this.setState({ prices : res.data, loading:false }))
+                        this.setState({initial:false})
+                      } 
+                      else { 
+                        //add a '0' before month code to months from january to september 
+                        this.setState({ yearcode : selectedYear, monthcode : '0' + (selectedMonth + 1) });
+                        axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=0' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+                        .then(res => this.setState({ prices : res.data, loading:false }))
+                        //this.state.initial was true to display the "select a date" message (see Table.js)
+                        this.setState({initial:false})
+                      }
+                    }.bind(this)}
+                  />
+                  <Calendar />
+                </div>
               </div>
             </div>
 

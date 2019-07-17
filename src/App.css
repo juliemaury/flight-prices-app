@@ -22,10 +22,6 @@ h1{
   text-align:center;
 }
 
-.right{
-  text-align:right;
-}
-
 .middle{
   vertical-align:middle;
 }
@@ -129,12 +125,21 @@ select:hover{
 
 /*-------------------- 2nd ROW --------------------*/
 
-.selectmonth{
-  margin-right:20px;
+.date-wrap{
+  text-align:center;
 }
 
-.calendar-container{
-  color:#000;
+@media only screen and (min-width:360px){
+  .date-wrap{
+    text-align:right;
+  }
+  .selectmonth {
+    margin-right: 20px;
+  }
+}
+
+.wrapper{
+  display:inline-block;
 }
 
 .react-month-picker {
@@ -153,8 +158,23 @@ select:hover{
   cursor:pointer;
 }
 
+.month-input + div{
+  position:absolute !important;
+  right:0;
+  top:30px;
+}
+
 .react-month-picker .month-input.readonly{
   background-color:#fff !important;
+}
+
+.react-month-picker .calendar-container{
+  color:#000;
+  width: 271px !important;
+  border:1px solid #C9C9C9 !important;
+  border-bottom-left-radius:0 !important;
+  border-bottom-right-radius:0 !important;
+  z-index:99 !important;
 }
 
 .calendarsvg{
@@ -164,6 +184,7 @@ select:hover{
   margin-top:-4px;
   margin-left:20px;
   vertical-align:middle;
+  padding:1px;
 }
 
 /*-------------------- 3rd ROW --------------------*/
