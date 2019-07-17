@@ -15,7 +15,6 @@ class ToDest extends Component {
         const selectedIndex = e.target.options.selectedIndex;
         const tocode = e.target.options[selectedIndex].getAttribute('code');
         this.props.handleChange(e.target.value, tocode);
-        console.log('TODEST.JS TOCODE : ' + tocode)
     }
 
     render() {

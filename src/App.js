@@ -41,7 +41,7 @@ class App extends Component {
   }
   
   fromDestChange(fromvalue, fromcode){
-    this.setState({fromcode:fromcode, fromvalue:fromvalue}, function(){
+    this.setState({fromcode : fromcode, fromvalue : fromvalue}, function(){
       this.searchTrips();
     });
   }
@@ -49,21 +49,21 @@ class App extends Component {
   toDestChange(tovalue, tocode){
     //change the state if user selected arrival destination for the first time
     if(tovalue !== ""){
-      this.setState({displayswitch:true});
+      this.setState({displayswitch : true});
     }
-    this.setState({loading:true});
-    this.setState({tocode:tocode, tovalue:tovalue}, function(){
+    this.setState({loading : true});
+    this.setState({tocode : tocode, tovalue : tovalue}, function(){
       this.searchTrips();
     });
   }
 
   switchDest(){
-    this.setState({loading:true});
+    this.setState({loading : true});
     //change the state on clic on switch button
     if(this.state.switch === false){
-      this.setState({switch: true});
+      this.setState({switch : true});
     }else{
-      this.setState({switch: false});
+      this.setState({switch : false});
     }
     //switch selected values & airport codes in state
     let fromV = this.state.fromvalue;
@@ -71,16 +71,16 @@ class App extends Component {
     let fromC = this.state.fromcode;
     let toC = this.state.tocode;
     //refresh the results
-    this.setState({fromcode:toC, tocode:fromC, fromvalue:toV, tovalue:fromV}, function(){
+    this.setState({fromcode : toC, tocode : fromC, fromvalue : toV, tovalue : fromV}, function(){
       this.searchTrips();
     });
   }
 
   searchTrips(){
     //refresh the results 
-    this.setState({loading:true});
+    this.setState({loading : true});
     axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-    .then(res => this.setState({ prices : res.data, loading:false }))
+    .then(res => this.setState({ prices : res.data, loading : false }))
   }
 
   render(){
@@ -99,7 +99,7 @@ class App extends Component {
     return (
         <div className="App">
           <div className="container py-4">
-            <h1 className="py-5">Choose your flight !</h1>
+            <h1 className="py-4">Choose your flight !</h1>
 
             <div className="row py-4 px-2">
               <div className="col-12 col-md-5 my-2 p-0">
@@ -140,20 +140,20 @@ class App extends Component {
                     closeOnSelect={true}
                     mode='calendarOnly' 
                     onChange={function(maskedValue, selectedYear, selectedMonth) {
-                      this.setState({loading:true});
+                      this.setState({loading : true});
                       if(selectedMonth > 8) {
-                        this.setState({ yearcode : selectedYear, monthcode : selectedMonth + 1 });
-                        axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-                        .then(res => this.setState({ prices : res.data, loading:false }))
-                        this.setState({initial:false})
+                        this.setState({ yearcode : selectedYear, monthcode : selectedMonth + 1}, function(){
+                          this.searchTrips();
+                        });
+                        this.setState({initial : false})
                       } 
                       else { 
                         //add a '0' before month code to months from january to september 
-                        this.setState({ yearcode : selectedYear, monthcode : '0' + (selectedMonth + 1) });
-                        axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=0' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
-                        .then(res => this.setState({ prices : res.data, loading:false }))
+                        this.setState({ yearcode : selectedYear, monthcode : '0' + (selectedMonth + 1)}, function(){
+                          this.searchTrips();
+                        });
                         //this.state.initial was true to display the "select a date" message (see Table.js)
-                        this.setState({initial:false})
+                        this.setState({initial : false})
                       }
                     }.bind(this)}
                   />
