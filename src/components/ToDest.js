@@ -6,10 +6,10 @@ class ToDest extends Component {
     constructor(props) {
         super(props);
         
-        this.handleChange = this.handleChange.bind(this);
+        this.changeSelected = this.changeSelected.bind(this);
     }
 
-    handleChange(e) {
+    changeSelected(e) {
         //get the value and airport code of selected element
         //to update select value & airportcode in the app state
         const selectedIndex = e.target.options.selectedIndex;
@@ -19,18 +19,18 @@ class ToDest extends Component {
 
     render() {
 
-        let selectedvalue;
-
         let options = this.props.dest.map((Data) => {
-            const option = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
-            if(!this.props.switch) { selectedvalue = this.props.value2 }
-            else{ selectedvalue = this.props.value1 }
-            return <option selected={selectedvalue === option} key={Data.DestinationID} code={Data.AirportCode} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
+            const selectedOption = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
+            
+            /*if(!this.props.switch) { selectedvalue = this.props.value2 }
+            else{ selectedvalue = this.props.value1 }*/
+
+            return <option key={Data.DestinationID} code={Data.AirportCode} value={selectedOption}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
         });
 
         return (
-            <select value={selectedvalue}  onChange={this.handleChange}>
-                    <option selected hidden> </option>
+            <select value={this.props.tovalue}  onChange={this.changeSelected}>
+                    <option value="" hidden> </option>
                     {options}
             </select>
         )

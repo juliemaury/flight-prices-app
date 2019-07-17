@@ -118,49 +118,10 @@ class App extends Component {
     let classswitch = 'switch-button h100 hidden'
     let hiddenrow = "row py-4 px-2 hidden"
 
-    //add class is-visible and delete class hidden if user selected arrival destination
+    //add class is-visible and delete class hidden if user selected an arrival destination
     if(this.state.displayswitch === true){
       classswitch = 'switch-button h100 is-visible'
       hiddenrow = "row py-4 px-2 is-visible"
-    }
-
-    //switch FromDest and ToDest components depending on switch state
-    let destination1;
-    let destination2;
-    let value1;
-    let value2;
-
-    if (this.state.switch) {
-      value1 = this.state.tovalue;
-      value2 = this.state.fromvalue;
-      destination2 = 
-        <FromDest 
-        dest={this.state.dest}
-        value1={value1}
-        handleChange={this.fromDestChange}
-        />;
-      destination1 = 
-        <ToDest
-        dest={this.state.dest}
-        value2={value2}
-        handleChange={this.toDestChange}
-        />;
-
-    } else {
-      value1 = this.state.fromvalue;
-      value2 = this.state.tovalue;
-      destination2 = 
-        <ToDest
-        dest={this.state.dest}
-        value2={value2}
-        handleChange={this.toDestChange}
-        />;
-      destination1 = 
-        <FromDest 
-        dest={this.state.dest}
-        value1={value1}
-        handleChange={this.fromDestChange}
-        />;
     }
 
     //content to display using bootstrap framework
@@ -173,7 +134,11 @@ class App extends Component {
               <div className="col-12 col-md-5 my-2 p-0">
                 <div className="select">
                   <label className="DestLabel">From</label>
-                    {destination1}
+                  <FromDest 
+                    dest={this.state.dest}
+                    handleChange={this.fromDestChange}
+                    fromvalue={this.state.fromvalue}
+                  />
                 </div>
               </div>
               <div className="col-12 col-md-2 my-2 p-0 middle">
@@ -186,7 +151,11 @@ class App extends Component {
               <div className="col-12 col-md-5 my-2 p-0">
                 <div className="select">
                   <label className="DestLabel">To</label>
-                    {destination2}
+                  <ToDest
+                    dest={this.state.dest}
+                    handleChange={this.toDestChange}
+                    tovalue={this.state.tovalue}
+                  />
                 </div>
               </div>
             </div>
