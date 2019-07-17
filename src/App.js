@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import FromDest from './components/FromDest';
 import ToDest from './components/ToDest';
 import Table from './components/Table';
+import Switch from './components/Switch';
+import Calendar from './components/Calendar';
 import axios from 'axios';
 import './App.css';
 import MonthPickerInput from 'react-month-picker-input';
 import 'react-month-picker-input/dist/react-month-picker-input.css';
-
-//https://www.csa.cz/Umbraco/Api/CalendarPricesCache/GetPrices/?DEP=PRG&ARR=BCN&MONTH_SEL=09/2019&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz
 
 class App extends Component {
   
@@ -16,7 +16,7 @@ class App extends Component {
 
     this.state = {
       dest:[],
-      prices:{calendarPriceList:{dayList:[{"date":"2019-09-01","status":"AVAILABLE","price":"2086","seats":"9","rbd":"R","duration":"0225","flightsCount":1,"flights":[{"flightNumber":"0688","seats":"9","rbd":"R","depIata":"PRG","arrIata":"BCN","departureDateTime":"2019-09-01 11:25:00","arrivalDateTime":"2019-09-01 13:50:00","duration":"0225","mileage":"0","aircraftRef":"738"}]},{"date":"2019-09-02","status":"AVAILABLE","price":"2086","seats":"9","rbd":"R","duration":"0225","flightsCount":1,"flights":[{"flightNumber":"0688","seats":"9","rbd":"R","depIata":"PRG","arrIata":"BCN","departureDateTime":"2019-09-02 11:25:00","arrivalDateTime":"2019-09-02 13:50:00","duration":"0225","mileage":"0","aircraftRef":"738"}]},{"date":"2019-09-30","status":"AVAILABLE","price":"1826","seats":"8","rbd":"P","duration":"0225","flightsCount":1,"flights":[{"flightNumber":"0688","seats":"8","rbd":"P","depIata":"PRG","arrIata":"BCN","departureDateTime":"2019-09-30 11:25:00","arrivalDateTime":"2019-09-30 13:50:00","duration":"0225","mileage":"0","aircraftRef":"738"}]}]}},
+      prices:{},
       yearcode:"",
       monthcode:"",
       fromvalue:"Prague, Ruzyne (PRG)",
@@ -36,22 +36,40 @@ class App extends Component {
     this.getToCode = this.getToCode.bind(this);
   }
 
-  fromDestChange = (fromvalue) =>
-  this.setState({fromvalue});
+  fromDestChange(fromvalue){
+    this.setState({fromvalue});
+    axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.tocode + '&ARR=' + this.state.fromcode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+    .then(res => this.setState({ prices : res.data }))
+  }
+    
 
   toDestChange(tovalue){
     this.setState({tovalue});
+    //change the state if user selected arrival destination
     if(tovalue !== ""){
       this.setState({displayswitch:true});
     }
+    //refresh the results 
+    axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.tocode + '&ARR=' + this.state.fromcode +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
+    .then(res => this.setState({ prices : res.data }))
   }
 
   getFromCode(fromcode){
-    this.setState({fromcode:fromcode})
+    if(!this.state.switch){
+      this.setState({fromcode:fromcode})
+    }
+    else{
+      this.setState({tocode:fromcode})
+    }
   }
 
   getToCode(tocode){
-    this.setState({tocode:tocode})
+    if(!this.state.switch){
+      this.setState({tocode:tocode})
+    }
+    else{
+      this.setState({fromcode:tocode})
+    }
   }
 
   componentDidMount() {
@@ -60,29 +78,35 @@ class App extends Component {
   }
 
   switchDest(){
+    //switch airport codes 
     let from = this.state.fromcode
     let to = this.state.tocode
     this.setState({fromcode:to})
     this.setState({tocode:from})
+    //change the state on clic on switch button
     if(this.state.switch === false){
       this.setState({switch: true});
     }else{
       this.setState({switch: false});
     }
+    //refresh the results
     axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ to + '&ARR=' + from +'&MONTH_SEL=' + this.state.monthcode + '/' + this.state.yearcode + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
     .then(res => this.setState({ prices : res.data }))
   }
 
   render(){
 
+    //hidden content classes 
     let classswitch = 'switch-button h100 hidden'
     let hiddenrow = "row p-4 hidden"
 
+    //add class is-visible and delete class hidden if user selected arrival destination
     if(this.state.displayswitch === true){
       classswitch = 'switch-button h100 is-visible'
       hiddenrow = "row p-4 is-visible"
     }
 
+    //switch FromDest and ToDest components depending on switch state
     const displays = this.state.switch;
     let destination1;
     let destination2;
@@ -121,6 +145,7 @@ class App extends Component {
         />;
     }
 
+    //content to display using bootstrap framework
     return (
         <div className="App">
           <div className="container py-4">
@@ -136,10 +161,7 @@ class App extends Component {
               <div className="col-12 col-md-2 my-2 p-0 middle">
                 <div className="center h100">
                   <button type="button" className={classswitch} onClick={this.switchDest}>
-                    <svg id="switchsvg" className="switch-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37.03 29.35">
-                      <path className="cls-1" d="M36.6,8.89a1.1,1.1,0,0,0-1.54.19l-2.14,2.76A14.67,14.67,0,0,0,5.39,8.13a1.1,1.1,0,1,0,2,1,12.48,12.48,0,0,1,23.4,3.11L27.87,10a1.1,1.1,0,0,0-1.35,1.74l4.92,3.82.11.06a1.05,1.05,0,0,0,.17.09,1.09,1.09,0,0,0,.34.07h.11a1.09,1.09,0,0,0,.38-.09,2.64,2.64,0,0,0,.36-.27l.07-.05,3.82-4.92A1.1,1.1,0,0,0,36.6,8.89Z" />
-                      <path className="cls-1" d="M31.23,19.59a1.1,1.1,0,0,0-1.47.51,12.47,12.47,0,0,1-23.47-3l2.87,2.23a1.1,1.1,0,0,0,1.35-1.74L5.59,13.76A1.1,1.1,0,0,0,4.05,14L.23,18.87A1.1,1.1,0,0,0,2,20.22l2.15-2.77a14.67,14.67,0,0,0,27.62,3.62A1.1,1.1,0,0,0,31.23,19.59Z" />
-                    </svg>
+                    <Switch />
                   </button>
                 </div>
               </div>
@@ -159,19 +181,23 @@ class App extends Component {
                   closeOnSelect={true}
                   mode='calendarOnly' 
                   onChange={function(maskedValue, selectedYear, selectedMonth) {
-                    if(selectedMonth > 8){
+                    if(selectedMonth > 8) {
                       this.setState({ yearcode : selectedYear, monthcode : selectedMonth + 1 });
                       axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
                       .then(res => this.setState({ prices : res.data }))
                       this.setState({initial:false})
-                    } else{
+                    } 
+                    else { 
+                      //add a '0' before month code to months from january to september 
                       this.setState({ yearcode : selectedYear, monthcode : '0' + (selectedMonth + 1) });
                       axios.get('/Api/CalendarPricesCache/GetPrices/?DEP='+ this.state.fromcode + '&ARR=' + this.state.tocode +'&MONTH_SEL=0' + (selectedMonth + 1) + '/' + selectedYear + '&SECTOR_ID=0&LANG=cs&ID_LOCATION=cz')
                       .then(res => this.setState({ prices : res.data }))
+                      //this.state.initial was true to display the "select a date" message (see Table.js)
                       this.setState({initial:false})
                     }
                   }.bind(this)}
                 />
+                <Calendar />
               </div>
             </div>
 

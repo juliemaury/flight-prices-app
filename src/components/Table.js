@@ -14,13 +14,30 @@ class Table extends Component {
                     </tbody>
         }
 
+        else if(!this.props.prices.calendarPriceList || !this.props.prices){
+            tbody = <tbody>
+                        <tr>
+                            <td colSpan="4" className="py-4"><em>Sorry, no tickets available for this trip.</em></td>
+                        </tr>
+                    </tbody>
+        }
+
+        else if(!this.props.prices.calendarPriceList.dayList.map(Trip => Trip.status).includes('AVAILABLE')){
+            tbody = <tbody>
+            <tr>
+                <td colSpan="4" className="py-4"><em>Sorry, no tickets available for this trip.</em></td>
+            </tr>
+        </tbody>
+        }
+
         else{
             tbody = <tbody>
                     {this.props.prices.calendarPriceList.dayList.map((Trip) => {
+                        console.log(this.props.prices.calendarPriceList.dayList)
                         if(Trip.status === "AVAILABLE"){
                             return <tr key={uuid.v4()}>
                                 <td>{Trip.date}</td> 
-                                <td>{Trip.price}</td>
+                                <td>{Trip.price} CZK</td>
                                 <td>{Trip.seats}</td>
                                 <td>{Trip.duration}</td>
                             </tr>
@@ -29,7 +46,6 @@ class Table extends Component {
                             return null
                         }
                     })}
-                        
                     </tbody>
         }
 
