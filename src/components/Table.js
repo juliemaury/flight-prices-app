@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import Loading from './Loading';
 import uuid from 'uuid';
 
 class Table extends Component {
@@ -9,7 +10,23 @@ class Table extends Component {
         if(this.props.initial){
             tbody = <tbody>
                         <tr>
-                            <td colSpan="4" className="py-4"><em>Please select the date of your travel</em></td>
+                            <td colSpan="4" className="py-4">
+                                <p>
+                                    <em>Please select the date of your travel</em>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+        }
+
+        else if(this.props.loading){
+            tbody = <tbody>
+                        <tr>
+                            <td colSpan="4" className="py-4">
+                                <p>
+                                    <Loading />
+                                </p>
+                            </td>
                         </tr>
                     </tbody>
         }
@@ -24,28 +41,36 @@ class Table extends Component {
 
         else if(!this.props.prices.calendarPriceList.dayList.map(Trip => Trip.status).includes('AVAILABLE')){
             tbody = <tbody>
-            <tr>
-                <td colSpan="4" className="py-4"><em>Sorry, no tickets available for this trip.</em></td>
-            </tr>
-        </tbody>
+                        <tr>
+                            <td colSpan="4" className="py-4"><em>Sorry, no tickets available for this trip.</em></td>
+                        </tr>
+                    </tbody>
         }
 
         else{
             tbody = <tbody>
-                    {this.props.prices.calendarPriceList.dayList.map((Trip) => {
-                        console.log(this.props.prices.calendarPriceList.dayList)
-                        if(Trip.status === "AVAILABLE"){
-                            return <tr key={uuid.v4()}>
-                                <td>{Trip.date}</td> 
-                                <td>{Trip.price} CZK</td>
-                                <td>{Trip.seats}</td>
-                                <td>{Trip.duration}</td>
-                            </tr>
-                        }
-                        else{
-                            return null
-                        }
-                    })}
+                        {this.props.prices.calendarPriceList.dayList.map((Trip) => {
+                            if(Trip.status === "AVAILABLE"){
+                                let olddate = Trip.date;
+                                let arr = olddate.split('-');
+                                let newdate = arr[2] + '.' + arr[1] + '.' + arr[0];
+                                let oldtime = Trip.duration;
+                                let timearr = oldtime.split('');
+                                if (timearr[0] === '0'){
+                                    timearr[0] = '';
+                                }
+                                let newtime = timearr[0] + timearr[1] + 'h ' + timearr[2] + timearr[3] + 'min';
+                                return <tr key={uuid.v4()}>
+                                    <td>{newdate}</td> 
+                                    <td>{Trip.price} CZK</td>
+                                    <td>{Trip.seats}</td>
+                                    <td>{newtime}</td>
+                                </tr>
+                            }
+                            else{
+                                return null
+                            }
+                        })}
                     </tbody>
         }
 
@@ -65,4 +90,4 @@ class Table extends Component {
     }
 }
 
-export default Table
+export default Table;

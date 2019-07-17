@@ -7,33 +7,30 @@ class FromDest extends Component {
         super(props);
         
         this.handleChange = this.handleChange.bind(this);
-        this.airportCode = this.airportCode.bind(this);
     }
 
     handleChange(e) {
-        this.props.handleChange(e.target.value);
-    }
-
-    airportCode = (e) => { 
+        //get the value and airport code of selected element
+        //to update select value & airportcode in the app state
         const selectedIndex = e.target.options.selectedIndex;
-        let fromcode = e.target.options[selectedIndex].getAttribute('code');
-        this.props.airportCode(fromcode);
+        const fromcode = e.target.options[selectedIndex].getAttribute('code');
+        this.props.handleChange(e.target.value, fromcode);
     }
 
-    twoCalls = (e) => {
-        this.handleChange(e)
-        this.airportCode(e)
-    }
-    
     render() {
+
+        let selectedvalue;
 
         let options = this.props.dest.map((Data) => {
             const option = Data.AirportCityName + ', ' + Data.AirportName + ' ('+ Data.AirportCode + ')';
-            return <option selected={this.props.fromvalue === option} key={Data.DestinationID} code={Data.AirportCode} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
+            
+            if(!this.props.switch) { selectedvalue = this.props.value1 }
+            else{ selectedvalue = this.props.value2 }
+            return <option selected={selectedvalue === option} key={Data.DestinationID} code={Data.AirportCode} value={option}>{Data.AirportCityName}, {Data.AirportName} ({Data.AirportCode})</option>
         });
 
         return (
-            <select value={this.props.fromvalue} onChange={this.twoCalls}>
+            <select value={selectedvalue} onChange={this.handleChange}>
                     {options}
             </select>
         )
@@ -43,8 +40,6 @@ class FromDest extends Component {
 FromDest.propTypes = {
     dest: PropTypes.array.isRequired,
     handleChange: PropTypes.func.isRequired,
-    airportCode: PropTypes.func.isRequired,
-    fromvalue: PropTypes.string.isRequired,
 }
 
 export default FromDest;
